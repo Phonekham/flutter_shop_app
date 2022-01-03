@@ -49,6 +49,7 @@ class Cart with ChangeNotifier {
               quantity: 1,
               price: price));
     }
+    notifyListeners();
   }
 
   void removeItem(String productId) {
