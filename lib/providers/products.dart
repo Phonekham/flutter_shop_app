@@ -1,4 +1,7 @@
+// ignore_for_file: prefer_final_fields
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'package:flutter_shop_app/providers/product.dart';
 
 class Products with ChangeNotifier {
@@ -52,6 +55,17 @@ class Products with ChangeNotifier {
   }
 
   void addProduct(Product product) {
+    const uri =
+        'https://flutter-shop-app-92002-default-rtdb.asia-southeast1.firebasedatabase.app/products.json';
+    var url = Uri.parse(uri);
+    http.post(url,
+        body: json.encode({
+          'title': product.title,
+          'description': product.description,
+          'price': product.price,
+          'imageUrl': product.imageUrl,
+          'id': DateTime.now().toString(),
+        }));
     final newProduct = Product(
       title: product.title,
       description: product.description,

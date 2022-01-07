@@ -36,19 +36,21 @@ class _EditProductScreenState extends State<EditProductScreen> {
   @override
   void didChangeDependencies() {
     if (_isInit) {
-      final productId = ModalRoute.of(context)!.settings.arguments as String;
-      if (productId != null) {
-        _editedProduct =
-            Provider.of<Products>(context, listen: false).findById(productId);
-        _initValues = {
-          'title': _editedProduct.title,
-          'description': _editedProduct.description,
-          'price': _editedProduct.price.toString(),
-          // 'imageUrl': _editedProduct.imageUrl,
-          'imageUrl': '',
-        };
-        _imageUrlController.text = _editedProduct.imageUrl;
-      }
+      // final productId = ModalRoute.of(context)!.settings.arguments as String;
+
+      // print(productId);
+      // if (productId != null) {
+      //   _editedProduct =
+      //       Provider.of<Products>(context, listen: false).findById(productId);
+      //   _initValues = {
+      //     'title': _editedProduct.title,
+      //     'description': _editedProduct.description,
+      //     'price': _editedProduct.price.toString(),
+      //     // 'imageUrl': _editedProduct.imageUrl,
+      //     'imageUrl': '',
+      //   };
+      //   _imageUrlController.text = _editedProduct.imageUrl;
+      // }
     }
     _isInit = false;
     super.didChangeDependencies();
@@ -83,10 +85,12 @@ class _EditProductScreenState extends State<EditProductScreen> {
       return;
     }
     _form.currentState!.save();
-    if (_editedProduct.id != null) {
+    if (_editedProduct.id != '') {
+      print('update product');
       Provider.of<Products>(context, listen: false)
           .updateProduct(_editedProduct.id, _editedProduct);
     } else {
+      print('add product');
       Provider.of<Products>(context, listen: false).addProduct(_editedProduct);
     }
     Navigator.of(context).pop();
