@@ -37,21 +37,19 @@ class _EditProductScreenState extends State<EditProductScreen> {
   @override
   void didChangeDependencies() {
     if (_isInit) {
-      // final productId = ModalRoute.of(context)!.settings.arguments as String;
+      final productId = ModalRoute.of(context)!.settings.arguments as String;
 
-      // print(productId);
-      // if (productId != null) {
-      //   _editedProduct =
-      //       Provider.of<Products>(context, listen: false).findById(productId);
-      //   _initValues = {
-      //     'title': _editedProduct.title,
-      //     'description': _editedProduct.description,
-      //     'price': _editedProduct.price.toString(),
-      //     // 'imageUrl': _editedProduct.imageUrl,
-      //     'imageUrl': '',
-      //   };
-      //   _imageUrlController.text = _editedProduct.imageUrl;
-      // }
+      if (productId != '') {
+        _editedProduct =
+            Provider.of<Products>(context, listen: false).findById(productId);
+        _initValues = {
+          'title': _editedProduct.title,
+          'description': _editedProduct.description,
+          'price': _editedProduct.price.toString(),
+          'imageUrl': '',
+        };
+        _imageUrlController.text = _editedProduct.imageUrl;
+      }
     }
     _isInit = false;
     super.didChangeDependencies();
@@ -91,8 +89,11 @@ class _EditProductScreenState extends State<EditProductScreen> {
     });
     if (_editedProduct.id != '') {
       print('update product');
-      Provider.of<Products>(context, listen: false)
+      await Provider.of<Products>(context, listen: false)
           .updateProduct(_editedProduct.id, _editedProduct);
+      setState(() {
+        _isLoading = true;
+      });
       Navigator.of(context).pop();
     } else {
       try {
@@ -111,12 +112,11 @@ class _EditProductScreenState extends State<EditProductScreen> {
                           },
                           child: Text('OK'))
                     ]));
-      } finally {
-        setState(() {
-          _isLoading = false;
-        });
-        Navigator.of(context).pop();
       }
+      setState(() {
+        _isLoading = false;
+      });
+      Navigator.of(context).pop();
     }
   }
 
